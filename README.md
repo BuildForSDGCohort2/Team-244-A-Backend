@@ -1,7 +1,6 @@
 # Team-244-Backend
 ## Safe-Home REST API
 
-
 A REST API help Organizations to find homeless people/animals and offer help.
 
 ## Run Safe-Home
