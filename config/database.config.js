@@ -1,3 +1,3 @@
 module.exports = {
-    url: "mongodb://localhost:27017/safe-home"
+  url: "mongodb+srv://safehome:safehomeSDG@cluster0.swh0q.mongodb.net/test",
 };
