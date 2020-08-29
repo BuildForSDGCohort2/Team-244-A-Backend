@@ -1,6 +1,6 @@
 
-const mongoose = require('mongoose')
-const bcrypt = require('bcrypt');
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 const Schema = mongoose.Schema;
 
 const PostSchema = new Schema({
@@ -16,7 +16,7 @@ const PostSchema = new Schema({
   },
   type: {
     type: String,
-    enum : ['people','animal'],
+    enum : ["people","animal"],
     required : true
   },
   password : {
@@ -29,6 +29,6 @@ PostSchema.methods.comparePassword = function(password) {
 };
 
 
-const PostModel = mongoose.model('pot',PostSchema);
+const PostModel = mongoose.model("pot",PostSchema);
 
 module.exports = PostModel;

@@ -1,6 +1,6 @@
 
-const mongoose = require('mongoose')
-const bcrypt = require('bcrypt');
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 const Schema = mongoose.Schema;
 
 const OrganizationSchema = new Schema({
@@ -37,7 +37,7 @@ const OrganizationSchema = new Schema({
   },
   preference: {
     type: String,
-    enum : ['people','animal'],
+    enum : ["people","animal"],
     required : true
   },
   posts : [{
@@ -54,6 +54,6 @@ OrganizationSchema.methods.comparePassword = function(password) {
 };
 
 
-const OrganizationModel = mongoose.model('organization',OrganizationSchema);
+const OrganizationModel = mongoose.model("organization",OrganizationSchema);
 
 module.exports = OrganizationModel;

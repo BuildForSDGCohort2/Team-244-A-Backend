@@ -1,7 +1,7 @@
 {
-    "name": "pokemon-digimons-app",
+    "name": "safe-home",
     "version": "1.0.0",
-    "description": " I am a fan of Pokemons and Digimons and want to raise awareness about such species by building a public API providing information on Pokemons and Digimons.",
+    "description": "REST API to help homless",
     "main": "server.js",
     "scripts": {
         "start": "nodemon server.js",
