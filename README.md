@@ -6,13 +6,13 @@ A REST API help Organizations to find homeless people/animals and offer help.
 
 ## Run Safe-Home
 
-1. Install dependencies
+Install dependencies
 
 ```bash
 npm install
 ```
 
-2. Run Server
+Run Server
 
 ```bash
 npm start
