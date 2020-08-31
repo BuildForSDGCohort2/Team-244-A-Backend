@@ -4,7 +4,7 @@ const MailService = require("./mail.service");
 const userModel = require("../models/user.model");
 const bcrypt = require("bcrypt");
 AuthService = {
-  async register(payload) {
+  async usersRegister(payload) {
     const isValid = await ValidationService.registerValidation(payload);
     if (!isValid) {
       let err = await ValidationService.createError(400, "Not Valid Data");
@@ -42,6 +42,21 @@ AuthService = {
     });
     await newUser.save();
     return true;
+  },
+  async usersLogin(user) {
+    let loggedUser = await ValidationService.loginValidation(user);
+    if (!loggedUser) {
+      let err = await ValidationService.createError(404, "No such user");
+      throw err;
+    }
+    let token = await JWT.sign(
+      { _id: loggedUser._id },
+      process.env.SECRET_KEY,
+      {
+        expiresIn: "67472347632732h",
+      }
+    );
+    return { token: token };
   },
 };
 
