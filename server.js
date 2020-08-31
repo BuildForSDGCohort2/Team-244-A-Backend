@@ -1,7 +1,8 @@
+require("dotenv/config");
 const express = require("express");
 const logger = require("npmlog");
 const bodyParser = require("body-parser");
-
+const auth = require("./app/routes/auth.route");
 // create express app
 const app = express();
 const port = process.env.PORT || 3000;
@@ -9,8 +10,6 @@ const port = process.env.PORT || 3000;
 // body parser
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
-//routes
 
 // Configuring the database
 const dbConfig = require("./config/database.config.js");
@@ -31,6 +30,9 @@ mongoose
     logger.error("Could not connect to the database. Exiting now...", err);
     process.exit();
   });
+
+//routes
+app.use("/api", auth);
 
 // 404 handler
 app.use("*", (req, res, next) => {
