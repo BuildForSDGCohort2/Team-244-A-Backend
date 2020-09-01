@@ -132,6 +132,73 @@ AuthService = {
     });
     return { token: token };
   },
+  async forgetPassword(payload) {
+    const isValid = await ValidationService.forgetPasswordValidation(payload);
+    if (!isValid) {
+      let err = await ValidationService.createError(400, "Not Valid Data");
+      throw err;
+    }
+    let token, user;
+    if (payload.type == "user") {
+      user = await userModel.findOne({ email: payload.email });
+      token = await JWT.sign(
+        { _id: user._id, type: payload.type },
+        process.env.SECRET_KEY,
+        {
+          expiresIn: "67472347632732h",
+        }
+      );
+    } else if (payload.type == "organization") {
+      user = await orgModel.findOne({ email: payload.email });
+      token = await JWT.sign(
+        { _id: user._id, type: payload.type },
+        process.env.SECRET_KEY,
+        {
+          expiresIn: "67472347632732h",
+        }
+      );
+    }
+    let mail = await MailService.sendEmail(
+      user.email,
+      token,
+      "forget password",
+      user.name
+    );
+    if (mail) {
+      return true;
+    }
+    let err = await ValidationService.createError(500, "server error");
+    throw err;
+  },
+  async resetPassword(payload, user) {
+    const isValid = await ValidationService.resetPasswordValidation(
+      payload,
+      user
+    );
+    if (!isValid) {
+      let err = await ValidationService.createError(400, "Not Valid Data");
+      throw err;
+    }
+    const salt = await bcrypt.genSalt(10);
+    let hash = await bcrypt.hash(payload.password, salt);
+    if (user.type == "user") {
+      let newUser = await userModel.findById(user._id);
+      if (newUser) {
+        newUser.password = hash;
+        await newUser.save();
+        return true;
+      }
+    } else if (user.type == "organization") {
+      let newOrg = await orgModel.findById(user._id);
+      if (newOrg) {
+        newOrg.password = hash;
+        await newOrg.save();
+        return true;
+      }
+    }
+    let err = await ValidationService.createError(500, "server error");
+    throw err;
+  },
 };
 
 module.exports = AuthService;

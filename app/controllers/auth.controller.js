@@ -1,5 +1,4 @@
 const AuthService = require("../services/auth.service");
-const { json } = require("body-parser");
 AuthController = {
   async usersRegister(req, res) {
     try {
@@ -53,6 +52,30 @@ AuthController = {
     try {
       const token = await this.AuthService.orgsLogin(req.body);
       res.status(200).send(token);
+    } catch (err) {
+      if (err.status) {
+        res.status(err.status).send(err.message);
+      } else {
+        res.status(500).send("Server Error");
+      }
+    }
+  },
+  async forgetPassword(req, res) {
+    try {
+      await this.AuthService.forgetPassword(req.body);
+      res.status(200).send("email has been sent");
+    } catch (err) {
+      if (err.status) {
+        res.status(err.status).send(err.message);
+      } else {
+        res.status(500).send("Server Error");
+      }
+    }
+  },
+  async resetPassword(req, res) {
+    try {
+      await this.AuthService.resetPassword(req.body, req.user);
+      res.status(200).send("password changed succissfully");
     } catch (err) {
       if (err.status) {
         res.status(err.status).send(err.message);

@@ -7,4 +7,6 @@ router.post("/users/confirm", checkAuth, AuthController.confirmUser);
 router.post("/users/login", AuthController.usersLogin);
 router.post("/orgs/register", AuthController.orgsRegister);
 router.post("/orgs/login", AuthController.orgsLogin);
+router.post("/forget-password", AuthController.forgetPassword);
+router.post("/reset-password", checkAuth, AuthController.resetPassword);
 module.exports = router;

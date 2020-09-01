@@ -1,6 +1,7 @@
 const Joi = require("joi");
 const userModel = require("../models/user.model");
 const orgModel = require("../models/organization.model");
+const ObjectId = require("mongoose").Types.ObjectId;
 
 ValidationService = {
   async userRegisterValidation(payload) {
@@ -81,10 +82,49 @@ ValidationService = {
     }
     return true;
   },
+  async forgetPasswordValidation(payload) {
+    const schema = Joi.object({
+      email: Joi.string().trim().email().required(),
+      type: Joi.string().valid("user", "organization").required(),
+    });
+    const validate = schema.validate({
+      email: payload.email,
+      type: payload.type,
+    });
+    if (validate.error) return false;
+    if (payload.type == "user") {
+      let checkUser = await this.validateMail(payload.email, "users");
+      if (checkUser) return false;
+    } else {
+      let checkOrg = await this.validateMail(payload.email, "orgs");
+      if (checkOrg) return false;
+    }
+    return true;
+  },
+  async resetPasswordValidation(payload, user) {
+    const schema = Joi.object({
+      password: Joi.string().required(),
+      type: Joi.string().valid("user", "organization").required(),
+    });
+    const validate = schema.validate({
+      password: payload.password,
+      type: user.type,
+    });
+    if (validate.error) return false;
+
+    return await this.checkMongooseID([user._id]);
+  },
   async createError(status, message) {
     let err = new Error(message);
     err.status = status;
     return err;
+  },
+  async checkMongooseID(ids) {
+    for (let id of ids) {
+      if (id == undefined) continue;
+      if (!ObjectId.isValid(id)) return 0;
+    }
+    return 1;
   },
 };
 module.exports = ValidationService;

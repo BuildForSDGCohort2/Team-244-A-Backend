@@ -36,15 +36,15 @@ MailService = {
           userName +
           " 😊 , </h1> <p> Your request has been sent so please wait till we review your organization's information  </p> ",
       };
-    } else if (type === "forget Password") {
+    } else if (type === "forget password") {
       mailOptions = {
         from: '"SafeHome" <' + String(process.env.EMAIL) + ">",
         to: email,
         subject: "👋 Please reset your password ",
         html:
-          "<html><h1>   Hi," +
+          "<html><h1>   Hi " +
           userName +
-          ', 😊 </h1> <p> please, do not worry at all  </p> <p> follow this link to reset your password  </p> <h2> <a href="http://localhost:8080/reset_password?token=' +
+          ' 😊 , </h1> <p> please follow this link to reset your password  </p> <h2> <a href="http://localhost:8080/reset_password?token=' +
           message +
           '" target ="_blank">Reset Password</a></h2></html>',
       };
