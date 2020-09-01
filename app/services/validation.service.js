@@ -1,7 +1,9 @@
 const Joi = require("joi");
 const userModel = require("../models/user.model");
+const orgModel = require("../models/organization.model");
+
 ValidationService = {
-  async registerValidation(payload) {
+  async userRegisterValidation(payload) {
     const schema = Joi.object({
       email: Joi.string().trim().email().required(),
       name: Joi.string().required(),
@@ -19,21 +21,65 @@ ValidationService = {
     if (validate.error) return false;
     return true;
   },
-  async loginValidation(user) {
+  async loginValidation(data, type) {
     const schema = Joi.object({
       email: Joi.string().trim().email().required(),
       password: Joi.string().required(),
     });
     const validate = schema.validate({
-      email: user.email,
-      password: user.password,
+      email: data.email,
+      password: data.password,
     });
     if (validate.error) return false;
-    let loggedUser = await userModel.findOne({ email: user.email });
-    if (!loggedUser) return false;
-    let validPassword = await loggedUser.comparePassword(user.password);
-    if (!validPassword) return false;
-    return loggedUser;
+    if (type == "users") {
+      let loggedUser = await userModel.findOne({ email: data.email });
+      if (!loggedUser) return false;
+      let validPassword = await loggedUser.comparePassword(data.password);
+      if (!validPassword) return false;
+      return loggedUser;
+    } else if (type == "orgs") {
+      let loggedOrg = await orgModel.findOne({ email: data.email });
+      if (!loggedOrg) return false;
+      let validPassword = await loggedOrg.comparePassword(data.password);
+      if (!validPassword) return false;
+      return loggedOrg;
+    }
+  },
+  async orgRegisterValidation(payload) {
+    const schema = Joi.object({
+      email: Joi.string().trim().email().required(),
+      name: Joi.string().required(),
+      password: Joi.string().required(),
+      phone: Joi.string()
+        .trim()
+        .regex(/^[0-9]{11}$/),
+      links: Joi.array().items(Joi.string().trim()),
+      preference: Joi.string().valid("people", "animal").required(),
+      address: Joi.string().required(),
+      description: Joi.string().required(),
+    });
+    const validate = schema.validate({
+      name: payload.name,
+      email: payload.email,
+      password: payload.password,
+      phone: payload.phone,
+      links: payload.links,
+      preference: payload.preference,
+      address: payload.address,
+      description: payload.description,
+    });
+    if (validate.error) return false;
+    return true;
+  },
+  async validateMail(email, type) {
+    if (type == "users") {
+      let checkUser = await userModel.findOne({ email: email });
+      if (checkUser) return false;
+    } else if (type == "orgs") {
+      let checkOrg = await orgModel.findOne({ email: email });
+      if (checkOrg) return false;
+    }
+    return true;
   },
   async createError(status, message) {
     let err = new Error(message);

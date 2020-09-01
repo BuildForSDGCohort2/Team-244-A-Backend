@@ -26,9 +26,19 @@ MailService = {
           message +
           '&type=signup" target ="_blank" style="color:green;">Confirm</a></h2></html>',
       };
+    } else if (type === "org") {
+      mailOptions = {
+        from: '"SafeHome" <' + String(process.env.EMAIL) + ">",
+        to: email,
+        subject: "👋 Thank you for joining safe home ",
+        html:
+          "<html><h1>   Hi " +
+          userName +
+          " 😊 , </h1> <p> Your request has been sent so please wait till we review your organization's information  </p> ",
+      };
     } else if (type === "forget Password") {
       mailOptions = {
-        from: '"SafeHome Contact" <' + String(process.env.EMAIL) + ">",
+        from: '"SafeHome" <' + String(process.env.EMAIL) + ">",
         to: email,
         subject: "👋 Please reset your password ",
         html:
@@ -40,7 +50,7 @@ MailService = {
       };
     } else {
       mailOptions = {
-        from: '"SafeHome Contact" <' + String(process.env.EMAIL) + ">",
+        from: '"SafeHome" <' + String(process.env.EMAIL) + ">",
         to: email,
         subject: "SafeHome has a message for you",
         text: message,
