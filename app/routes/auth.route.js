@@ -1,13 +1,13 @@
-const router = require("express").Router();
+const Router = new require("express").Router();
 const AuthController = require("../controllers/auth.controller");
 const { auth: checkAuth } = require("../middlewares/auth.middleware");
 
-router.post("/users/register", AuthController.usersRegister);
-router.post("/users/confirm", checkAuth, AuthController.confirmUser);
-router.post("/users/login", AuthController.usersLogin);
-router.post("/orgs/register", AuthController.orgsRegister);
-router.post("/orgs/login", AuthController.orgsLogin);
-router.post("/forget-password", AuthController.forgetPassword);
-router.put("/reset-password", checkAuth, AuthController.resetPassword);
+Router.post("/users/register", AuthController.usersRegister);
+Router.post("/users/confirm", checkAuth, AuthController.confirmUser);
+Router.post("/users/login", AuthController.usersLogin);
+Router.post("/orgs/register", AuthController.orgsRegister);
+Router.post("/orgs/login", AuthController.orgsLogin);
+Router.post("/forget-password", AuthController.forgetPassword);
+Router.put("/reset-password", checkAuth, AuthController.resetPassword);
 
-module.exports = router;
+module.exports = Router;

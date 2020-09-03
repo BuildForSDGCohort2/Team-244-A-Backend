@@ -2,7 +2,7 @@ const AuthService = require("../services/auth.service");
 const AuthController = {
   async usersRegister(req, res) {
     try {
-      await this.AuthService.usersRegister(req.body);
+      await AuthService.usersRegister(req.body);
       res.status(200).send("confirmation mail has been sent");
     } catch (err) {
       if (err.status) {
@@ -14,7 +14,7 @@ const AuthController = {
   },
   async confirmUser(req, res) {
     try {
-      await this.AuthService.confirmUser(req.user);
+      await AuthService.confirmUser(req.user);
       res.status(201).send("account has been confirmed");
     } catch (err) {
       if (err.status) {
@@ -26,7 +26,7 @@ const AuthController = {
   },
   async usersLogin(req, res) {
     try {
-      const token = await this.AuthService.usersLogin(req.body);
+      const token = await AuthService.usersLogin(req.body);
       res.status(200).send(token);
     } catch (err) {
       if (err.status) {
@@ -38,7 +38,7 @@ const AuthController = {
   },
   async orgsRegister(req, res) {
     try {
-      await this.AuthService.orgsRegister(req.body);
+      await AuthService.orgsRegister(req.body);
       res.status(201).send("your signup request has been sent");
     } catch (err) {
       if (err.status) {
@@ -50,7 +50,7 @@ const AuthController = {
   },
   async orgsLogin(req, res) {
     try {
-      const token = await this.AuthService.orgsLogin(req.body);
+      const token = await AuthService.orgsLogin(req.body);
       res.status(200).send(token);
     } catch (err) {
       if (err.status) {
@@ -62,7 +62,7 @@ const AuthController = {
   },
   async forgetPassword(req, res) {
     try {
-      await this.AuthService.forgetPassword(req.body);
+      await AuthService.forgetPassword(req.body);
       res.status(200).send("email has been sent");
     } catch (err) {
       if (err.status) {
@@ -74,7 +74,7 @@ const AuthController = {
   },
   async resetPassword(req, res) {
     try {
-      await this.AuthService.resetPassword(req.body, req.user);
+      await AuthService.resetPassword(req.body, req.user);
       res.status(200).send("password changed succissfully");
     } catch (err) {
       if (err.status) {
