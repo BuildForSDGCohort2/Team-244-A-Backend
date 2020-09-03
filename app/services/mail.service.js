@@ -30,7 +30,7 @@ const MailService = {
         html:
           "<html><h1>  Hi " +
           userName +
-          " 😊 , </h1> <p> you should confirm your email to complete your account </p> <h2> <a href='http://localhost:8080/confirm?token='" +
+          " 😊 , </h1> <p> you should confirm your email to complete your account </p> <h2> <a href='http://localhost:8080/confirm?token=" +
           message +
           "&type=signup' target ='_blank' style='color:green;'>Confirm</a></h2></html>",
       };
@@ -52,7 +52,7 @@ const MailService = {
         html:
           "<html><h1>   Hi " +
           userName +
-          " 😊 , </h1> <p> please follow this link to reset your password  </p> <h2> <a href='http://localhost:8080/reset_password?token='" +
+          " 😊 , </h1> <p> please follow this link to reset your password  </p> <h2> <a href='http://localhost:8080/reset_password?token=" +
           message +
           "' target ='_blank'>Reset Password</a></h2></html>",
       };

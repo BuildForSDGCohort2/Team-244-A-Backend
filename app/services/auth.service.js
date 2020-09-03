@@ -62,7 +62,10 @@ const AuthService = {
       phone: user.phone,
       posts: [],
     });
-    await newUser.save();
+    await newUser.save().catch(async (err) => {
+      err = await ValidationService.createError(400, "Not Valid Data");
+      throw err;
+    });
     return true;
   },
   /**
@@ -124,7 +127,10 @@ const AuthService = {
       posts: [],
       confirm: false,
     });
-    await org.save();
+    await org.save().catch(async (err) => {
+      err = await ValidationService.createError(400, "Not Valid Data");
+      throw err;
+    });
     let mail = await MailService.sendEmail(
       payload.email,
       null,
@@ -227,14 +233,20 @@ const AuthService = {
       let newUser = await UserModel.findById(user._id);
       if (newUser) {
         newUser.password = hash;
-        await newUser.save();
+        await newUser.save().catch(async (err) => {
+          err = await ValidationService.createError(400, "Not Valid Data");
+          throw err;
+        });
         return true;
       }
     } else if (user.type === "organization") {
       let newOrg = await OrgModel.findById(user._id);
       if (newOrg) {
         newOrg.password = hash;
-        await newOrg.save();
+        await newOrg.save().catch(async (err) => {
+          err = await ValidationService.createError(400, "Not Valid Data");
+          throw err;
+        });
         return true;
       }
     }
