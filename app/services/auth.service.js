@@ -1,8 +1,8 @@
 const ValidationService = require("./validation.service");
 const JWT = require("jsonwebtoken");
 const MailService = require("./mail.service");
-const userModel = require("../models/user.model");
-const orgModel = require("../models/organization.model");
+const UserModel = require("../models/user.model");
+const OrgModel = require("../models/organization.model");
 const bcrypt = require("bcrypt");
 const AuthService = {
   /**
@@ -55,14 +55,14 @@ const AuthService = {
     }
     const salt = await bcrypt.genSalt(10);
     let hash = await bcrypt.hash(user.password, salt);
-    let User = new userModel({
+    let user = new UserModel({
       name: user.name,
       email: user.email,
       password: hash,
       phone: user.phone,
       posts: [],
     });
-    await User.save();
+    await user.save();
     return true;
   },
   /**
@@ -112,7 +112,7 @@ const AuthService = {
     }
     const salt = await bcrypt.genSalt(10);
     let hash = await bcrypt.hash(payload.password, salt);
-    let Org = new orgModel({
+    let org = new OrgModel({
       name: payload.name,
       email: payload.email,
       password: hash,
@@ -124,7 +124,7 @@ const AuthService = {
       posts: [],
       confirm: false,
     });
-    await Org.save();
+    await org.save();
     let mail = await MailService.sendEmail(
       payload.email,
       null,
@@ -176,7 +176,7 @@ const AuthService = {
     }
     let token, user;
     if (payload.type === "user") {
-      user = await userModel.findOne({ email: payload.email });
+      user = await UserModel.findOne({ email: payload.email });
       token = await JWT.sign(
         { _id: user._id, type: payload.type },
         process.env.SECRET_KEY,
@@ -185,7 +185,7 @@ const AuthService = {
         }
       );
     } else if (payload.type === "organization") {
-      user = await orgModel.findOne({ email: payload.email });
+      user = await OrgModel.findOne({ email: payload.email });
       token = await JWT.sign(
         { _id: user._id, type: payload.type },
         process.env.SECRET_KEY,
@@ -224,14 +224,14 @@ const AuthService = {
     const salt = await bcrypt.genSalt(10);
     let hash = await bcrypt.hash(payload.password, salt);
     if (user.type === "user") {
-      let newUser = await userModel.findById(user._id);
+      let newUser = await UserModel.findById(user._id);
       if (newUser) {
         newUser.password = hash;
         await newUser.save();
         return true;
       }
     } else if (user.type === "organization") {
-      let newOrg = await orgModel.findById(user._id);
+      let newOrg = await OrgModel.findById(user._id);
       if (newOrg) {
         newOrg.password = hash;
         await newOrg.save();

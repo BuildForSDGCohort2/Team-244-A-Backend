@@ -1,6 +1,6 @@
 const Joi = require("joi");
-const userModel = require("../models/user.model");
-const orgModel = require("../models/organization.model");
+const UserModel = require("../models/user.model");
+const OrgModel = require("../models/organization.model");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 const ValidationService = {
@@ -48,7 +48,7 @@ const ValidationService = {
       return false;
     }
     if (type === "users") {
-      let loggedUser = await userModel.findOne({ email: data.email });
+      let loggedUser = await UserModel.findOne({ email: data.email });
       if (!loggedUser) {
         return false;
       }
@@ -58,7 +58,7 @@ const ValidationService = {
       }
       return loggedUser;
     } else if (type === "orgs") {
-      let loggedOrg = await orgModel.findOne({ email: data.email });
+      let loggedOrg = await OrgModel.findOne({ email: data.email });
       if (!loggedOrg) {
         return false;
       }
@@ -110,12 +110,12 @@ const ValidationService = {
    */
   async validateMail(email, type) {
     if (type === "users") {
-      let checkUser = await userModel.findOne({ email: email });
+      let checkUser = await UserModel.findOne({ email });
       if (checkUser) {
         return false;
       }
     } else if (type === "orgs") {
-      let checkOrg = await orgModel.findOne({ email: email });
+      let checkOrg = await OrgModel.findOne({ email });
       if (checkOrg) {
         return false;
       }
@@ -180,7 +180,7 @@ const ValidationService = {
   },
   async checkMongooseID(ids) {
     for (let id of ids) {
-      if (id === undefined) {
+      if (!id) {
         continue;
       }
       if (!ObjectId.isValid(id)) {

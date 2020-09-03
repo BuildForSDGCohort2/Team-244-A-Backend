@@ -14,8 +14,10 @@ const AuthController = {
   },
   async confirmUser(req, res) {
     try {
-      await AuthService.confirmUser(req.user);
-      res.status(201).send("account has been confirmed");
+      const check = await AuthService.confirmUser(req.user);
+      if (check) {
+        res.status(201).send("account has been confirmed");
+      }
     } catch (err) {
       if (err.status) {
         res.status(err.status).send(err.message);
