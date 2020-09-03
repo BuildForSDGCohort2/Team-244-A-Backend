@@ -55,14 +55,14 @@ const AuthService = {
     }
     const salt = await bcrypt.genSalt(10);
     let hash = await bcrypt.hash(user.password, salt);
-    let user = new UserModel({
+    let newUser = new UserModel({
       name: user.name,
       email: user.email,
       password: hash,
       phone: user.phone,
       posts: [],
     });
-    await user.save();
+    await newUser.save();
     return true;
   },
   /**
