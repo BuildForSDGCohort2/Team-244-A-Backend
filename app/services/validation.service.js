@@ -24,7 +24,9 @@ const ValidationService = {
       password: payload.password,
       phone: payload.phone,
     });
-    if (validate.error) return false;
+    if (validate.error) {
+      return false;
+    }
     return true;
   },
   /**
@@ -42,18 +44,28 @@ const ValidationService = {
       email: data.email,
       password: data.password,
     });
-    if (validate.error) return false;
-    if (type == "users") {
+    if (validate.error) {
+      return false;
+    }
+    if (type === "users") {
       let loggedUser = await userModel.findOne({ email: data.email });
-      if (!loggedUser) return false;
+      if (!loggedUser) {
+        return false;
+      }
       let validPassword = await loggedUser.comparePassword(data.password);
-      if (!validPassword) return false;
+      if (!validPassword) {
+        return false;
+      }
       return loggedUser;
-    } else if (type == "orgs") {
+    } else if (type === "orgs") {
       let loggedOrg = await orgModel.findOne({ email: data.email });
-      if (!loggedOrg) return false;
+      if (!loggedOrg) {
+        return false;
+      }
       let validPassword = await loggedOrg.comparePassword(data.password);
-      if (!validPassword) return false;
+      if (!validPassword) {
+        return false;
+      }
       return loggedOrg;
     }
   },
@@ -85,7 +97,9 @@ const ValidationService = {
       address: payload.address,
       description: payload.description,
     });
-    if (validate.error) return false;
+    if (validate.error) {
+      return false;
+    }
     return true;
   },
   /**
@@ -95,12 +109,16 @@ const ValidationService = {
    * @returns (Boolean)
    */
   async validateMail(email, type) {
-    if (type == "users") {
+    if (type === "users") {
       let checkUser = await userModel.findOne({ email: email });
-      if (checkUser) return false;
-    } else if (type == "orgs") {
+      if (checkUser) {
+        return false;
+      }
+    } else if (type === "orgs") {
       let checkOrg = await orgModel.findOne({ email: email });
-      if (checkOrg) return false;
+      if (checkOrg) {
+        return false;
+      }
     }
     return true;
   },
@@ -118,13 +136,19 @@ const ValidationService = {
       email: payload.email,
       type: payload.type,
     });
-    if (validate.error) return false;
-    if (payload.type == "user") {
+    if (validate.error) {
+      return false;
+    }
+    if (payload.type === "user") {
       let checkUser = await this.validateMail(payload.email, "users");
-      if (checkUser) return false;
+      if (checkUser) {
+        return false;
+      }
     } else {
       let checkOrg = await this.validateMail(payload.email, "orgs");
-      if (checkOrg) return false;
+      if (checkOrg) {
+        return false;
+      }
     }
     return true;
   },
@@ -143,7 +167,9 @@ const ValidationService = {
       password: payload.password,
       type: user.type,
     });
-    if (validate.error) return false;
+    if (validate.error) {
+      return false;
+    }
 
     return await this.checkMongooseID([user._id]);
   },
@@ -154,8 +180,12 @@ const ValidationService = {
   },
   async checkMongooseID(ids) {
     for (let id of ids) {
-      if (id == undefined) continue;
-      if (!ObjectId.isValid(id)) return 0;
+      if (id === undefined) {
+        continue;
+      }
+      if (!ObjectId.isValid(id)) {
+        return 0;
+      }
     }
     return 1;
   },

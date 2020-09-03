@@ -24,19 +24,19 @@ const MailService = {
     let mailOptions;
     if (type === "confirm") {
       mailOptions = {
-        from: '"SafeHome" <' + String(process.env.EMAIL) + ">",
+        from: "SafeHome <" + String(process.env.EMAIL) + ">",
         to: email,
         subject: "👋 Please confirm your email",
         html:
           "<html><h1>  Hi " +
           userName +
-          ' 😊 , </h1> <p> you should confirm your email to complete your account </p> <h2> <a href="http://localhost:8080/confirm?token=' +
+          " 😊 , </h1> <p> you should confirm your email to complete your account </p> <h2> <a href='http://localhost:8080/confirm?token='" +
           message +
-          '&type=signup" target ="_blank" style="color:green;">Confirm</a></h2></html>',
+          "&type=signup' target ='_blank' style='color:green;'>Confirm</a></h2></html>",
       };
     } else if (type === "org") {
       mailOptions = {
-        from: '"SafeHome" <' + String(process.env.EMAIL) + ">",
+        from: "SafeHome <" + String(process.env.EMAIL) + ">",
         to: email,
         subject: "👋 Thank you for joining safe home ",
         html:
@@ -46,19 +46,19 @@ const MailService = {
       };
     } else if (type === "forget password") {
       mailOptions = {
-        from: '"SafeHome" <' + String(process.env.EMAIL) + ">",
+        from: "SafeHome <" + String(process.env.EMAIL) + ">",
         to: email,
         subject: "👋 Please reset your password ",
         html:
           "<html><h1>   Hi " +
           userName +
-          ' 😊 , </h1> <p> please follow this link to reset your password  </p> <h2> <a href="http://localhost:8080/reset_password?token=' +
+          " 😊 , </h1> <p> please follow this link to reset your password  </p> <h2> <a href='http://localhost:8080/reset_password?token='" +
           message +
-          '" target ="_blank">Reset Password</a></h2></html>',
+          "' target ='_blank'>Reset Password</a></h2></html>",
       };
     } else {
       mailOptions = {
-        from: '"SafeHome" <' + String(process.env.EMAIL) + ">",
+        from: "SafeHome <" + String(process.env.EMAIL) + ">",
         to: email,
         subject: "SafeHome has a message for you",
         text: message,

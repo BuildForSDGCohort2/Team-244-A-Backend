@@ -55,14 +55,14 @@ const AuthService = {
     }
     const salt = await bcrypt.genSalt(10);
     let hash = await bcrypt.hash(user.password, salt);
-    let newUser = new userModel({
+    let User = new userModel({
       name: user.name,
       email: user.email,
       password: hash,
       phone: user.phone,
       posts: [],
     });
-    await newUser.save();
+    await User.save();
     return true;
   },
   /**
@@ -83,7 +83,10 @@ const AuthService = {
         expiresIn: "67472347632732h",
       }
     );
-    return { token: token };
+    const tokenObject = {
+      token,
+    };
+    return tokenObject;
   },
   /**
    * @description register a new organization into safehome accounts
@@ -109,7 +112,7 @@ const AuthService = {
     }
     const salt = await bcrypt.genSalt(10);
     let hash = await bcrypt.hash(payload.password, salt);
-    let newOrg = new orgModel({
+    let Org = new orgModel({
       name: payload.name,
       email: payload.email,
       password: hash,
@@ -121,7 +124,7 @@ const AuthService = {
       posts: [],
       confirm: false,
     });
-    await newOrg.save();
+    await Org.save();
     let mail = await MailService.sendEmail(
       payload.email,
       null,
@@ -145,7 +148,7 @@ const AuthService = {
       let err = await ValidationService.createError(404, "No such user");
       throw err;
     }
-    if (loggedOrg.confirm == false) {
+    if (loggedOrg.confirm === false) {
       let err = await ValidationService.createError(
         401,
         "organization account hasn't been confirmed yet"
@@ -155,7 +158,10 @@ const AuthService = {
     let token = await JWT.sign({ _id: loggedOrg._id }, process.env.SECRET_KEY, {
       expiresIn: "67472347632732h",
     });
-    return { token: token };
+    const tokenObject = {
+      token,
+    };
+    return tokenObject;
   },
   /**
    * @description forget password of a user/organization
@@ -169,7 +175,7 @@ const AuthService = {
       throw err;
     }
     let token, user;
-    if (payload.type == "user") {
+    if (payload.type === "user") {
       user = await userModel.findOne({ email: payload.email });
       token = await JWT.sign(
         { _id: user._id, type: payload.type },
@@ -178,7 +184,7 @@ const AuthService = {
           expiresIn: "67472347632732h",
         }
       );
-    } else if (payload.type == "organization") {
+    } else if (payload.type === "organization") {
       user = await orgModel.findOne({ email: payload.email });
       token = await JWT.sign(
         { _id: user._id, type: payload.type },
@@ -217,14 +223,14 @@ const AuthService = {
     }
     const salt = await bcrypt.genSalt(10);
     let hash = await bcrypt.hash(payload.password, salt);
-    if (user.type == "user") {
+    if (user.type === "user") {
       let newUser = await userModel.findById(user._id);
       if (newUser) {
         newUser.password = hash;
         await newUser.save();
         return true;
       }
-    } else if (user.type == "organization") {
+    } else if (user.type === "organization") {
       let newOrg = await orgModel.findById(user._id);
       if (newOrg) {
         newOrg.password = hash;
