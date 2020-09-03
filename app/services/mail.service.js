@@ -1,5 +1,13 @@
 const nodemailer = require("nodemailer");
 MailService = {
+  /**
+   * @description send email to user with different types
+   * @param (string) email : the user email
+   * @param (string) message : the message or token that has data sent through mail
+   * @param (string) type : type that identify which message will be sent
+   * @param (string) userName : the user name we'll send him the email
+   * @returns (Boolean)
+   */
   async sendEmail(email, message, type, userName) {
     let transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",

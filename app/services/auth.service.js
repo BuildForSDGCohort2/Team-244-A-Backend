@@ -5,6 +5,11 @@ const userModel = require("../models/user.model");
 const orgModel = require("../models/organization.model");
 const bcrypt = require("bcrypt");
 AuthService = {
+  /**
+   * @description register a new user into safehome accounts
+   * @param (Object) payload : the request body that contains user data (name-email-password-phone)
+   * @returns (Boolean)
+   */
   async usersRegister(payload) {
     const isValid = await ValidationService.userRegisterValidation(payload);
     if (!isValid) {
@@ -37,6 +42,11 @@ AuthService = {
     let err = await ValidationService.createError(500, "Couldn't sign up");
     throw err;
   },
+  /**
+   * @description confirm a new user account
+   * @param (Object) user : the user data (name-email-password-phone)
+   * @returns (Boolean)
+   */
   async confirmUser(user) {
     const validUser = await ValidationService.userRegisterValidation(user);
     if (!validUser) {
@@ -55,6 +65,11 @@ AuthService = {
     await newUser.save();
     return true;
   },
+  /**
+   * @description login user
+   * @param (Object) user : the user account data (email-password)
+   * @returns (Object) token : the JWT of the user
+   */
   async usersLogin(user) {
     let loggedUser = await ValidationService.loginValidation(user, "users");
     if (!loggedUser) {
@@ -70,6 +85,11 @@ AuthService = {
     );
     return { token: token };
   },
+  /**
+   * @description register a new organization into safehome accounts
+   * @param (Object) payload : the request body that contains organization data (name-email-password-phone-links-description-preference-address)
+   * @returns (Boolean)
+   */
   async orgsRegister(payload) {
     const isValid = await ValidationService.orgRegisterValidation(payload);
     if (!isValid) {
@@ -114,6 +134,11 @@ AuthService = {
     let err = await ValidationService.createError(500, "Couldn't sign up");
     throw err;
   },
+  /**
+   * @description login organization
+   * @param (Object) org : the org account data (email-password)
+   * @returns (Object) token : the JWT of the organization
+   */
   async orgsLogin(org) {
     let loggedOrg = await ValidationService.loginValidation(org, "orgs");
     if (!loggedOrg) {
@@ -132,6 +157,11 @@ AuthService = {
     });
     return { token: token };
   },
+  /**
+   * @description forget password of a user/organization
+   * @param (Object) payload : the request body that contains (type=[organization/user],email)
+   * @returns (Boolean)
+   */
   async forgetPassword(payload) {
     const isValid = await ValidationService.forgetPasswordValidation(payload);
     if (!isValid) {
@@ -170,6 +200,12 @@ AuthService = {
     let err = await ValidationService.createError(500, "server error");
     throw err;
   },
+  /**
+   * @description reset password of a user/organization
+   * @param (Object) payload : the request body that contains the new passowrd (password)
+   * @param (Object) user : the user data sent through token (type,id)
+   * @returns (Boolean)
+   */
   async resetPassword(payload, user) {
     const isValid = await ValidationService.resetPasswordValidation(
       payload,

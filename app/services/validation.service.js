@@ -4,6 +4,11 @@ const orgModel = require("../models/organization.model");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 ValidationService = {
+  /**
+   * @description validate registeration data of a new user
+   * @param (Object) payload : the request body that contains user data (name-email-password-phone)
+   * @returns (Boolean)
+   */
   async userRegisterValidation(payload) {
     const schema = Joi.object({
       email: Joi.string().trim().email().required(),
@@ -22,6 +27,12 @@ ValidationService = {
     if (validate.error) return false;
     return true;
   },
+  /**
+   * @description validate login data of a user/ an organization
+   * @param (Object) data : the user account data (email-password)
+   * @param (string) type : the user type [users,orgs]
+   * @returns (Object|Boolean) user : the user or org object
+   */
   async loginValidation(data, type) {
     const schema = Joi.object({
       email: Joi.string().trim().email().required(),
@@ -46,6 +57,11 @@ ValidationService = {
       return loggedOrg;
     }
   },
+  /**
+   * @description validate registeration data of a new organization
+   * @param (Object) payload : the request body that contains organization data (name-email-password-phone-links-description-preference-address)
+   * @returns (Boolean)
+   */
   async orgRegisterValidation(payload) {
     const schema = Joi.object({
       email: Joi.string().trim().email().required(),
@@ -72,6 +88,12 @@ ValidationService = {
     if (validate.error) return false;
     return true;
   },
+  /**
+   * @description validate if an email exists or not into safehome accounts
+   * @param (string) email : email needs to be validated
+   * @param (string) type : type of emails (orgs/users)
+   * @returns (Boolean)
+   */
   async validateMail(email, type) {
     if (type == "users") {
       let checkUser = await userModel.findOne({ email: email });
@@ -82,6 +104,11 @@ ValidationService = {
     }
     return true;
   },
+  /**
+   * @description validate forget password of a user/organization data
+   * @param (Object) payload : the request body that contains (type=[organization/user],email)
+   * @returns (Boolean)
+   */
   async forgetPasswordValidation(payload) {
     const schema = Joi.object({
       email: Joi.string().trim().email().required(),
@@ -101,6 +128,12 @@ ValidationService = {
     }
     return true;
   },
+  /**
+   * @description validate reset password of a user/organization data
+   * @param (Object) payload : the request body that contains the new passowrd (password)
+   * @param (Object) user : the user data sent through token (type,id)
+   * @returns (Boolean)
+   */
   async resetPasswordValidation(payload, user) {
     const schema = Joi.object({
       password: Joi.string().required(),
