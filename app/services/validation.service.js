@@ -3,7 +3,7 @@ const userModel = require("../models/user.model");
 const orgModel = require("../models/organization.model");
 const ObjectId = require("mongoose").Types.ObjectId;
 
-ValidationService = {
+const ValidationService = {
   /**
    * @description validate registeration data of a new user
    * @param (Object) payload : the request body that contains user data (name-email-password-phone)

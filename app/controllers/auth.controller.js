@@ -1,5 +1,5 @@
 const AuthService = require("../services/auth.service");
-AuthController = {
+const AuthController = {
   async usersRegister(req, res) {
     try {
       await this.AuthService.usersRegister(req.body);

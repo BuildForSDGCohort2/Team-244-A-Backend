@@ -4,7 +4,7 @@ const MailService = require("./mail.service");
 const userModel = require("../models/user.model");
 const orgModel = require("../models/organization.model");
 const bcrypt = require("bcrypt");
-AuthService = {
+const AuthService = {
   /**
    * @description register a new user into safehome accounts
    * @param (Object) payload : the request body that contains user data (name-email-password-phone)

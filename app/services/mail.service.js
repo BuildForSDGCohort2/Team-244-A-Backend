@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-MailService = {
+const MailService = {
   /**
    * @description send email to user with different types
    * @param (string) email : the user email
